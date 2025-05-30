@@ -13,6 +13,38 @@ public class EventFunctions
     private static readonly List<Event> _events = new();
     private static int _nextId = 1;
 
+    static EventFunctions()
+    {
+        // Add some sample data for testing
+        _events.AddRange(new[]
+        {
+            new Event
+            {
+                Id = _nextId++,
+                Name = "Tech Conference 2024",
+                Location = "San Francisco, CA",
+                Date = DateTime.Parse("2024-06-15"),
+                StartTime = TimeSpan.Parse("09:00:00")
+            },
+            new Event
+            {
+                Id = _nextId++,
+                Name = "Web Development Workshop",
+                Location = "New York, NY",
+                Date = DateTime.Parse("2024-07-20"),
+                StartTime = TimeSpan.Parse("14:00:00")
+            },
+            new Event
+            {
+                Id = _nextId++,
+                Name = "AI and Machine Learning Summit",
+                Location = "Seattle, WA",
+                Date = DateTime.Parse("2024-08-10"),
+                StartTime = TimeSpan.Parse("10:30:00")
+            }
+        });
+    }
+
     public EventFunctions(ILoggerFactory loggerFactory)
     {
         _logger = loggerFactory.CreateLogger<EventFunctions>();

@@ -18,7 +18,7 @@ jobs:
     
     defaults:
       run:
-        working-directory: ./backend/EventManagement
+        working-directory: ./backend
 
     steps:
     - uses: actions/checkout@v4
@@ -38,13 +38,13 @@ jobs:
       run: dotnet test --no-build --configuration Release --verbosity normal
       
     - name: Publish
-      run: dotnet publish --no-build --configuration Release --output ./publish
+      run: dotnet publish EventManagement/EventManagement.csproj --no-build --configuration Release --output ./publish
       
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: backend-build
-        path: ./backend/EventManagement/publish/
+        path: ./backend/publish/
 
   docker:
     needs: build
