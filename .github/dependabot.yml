@@ -1,0 +1,46 @@
+version: 2
+updates:
+  # Enable version updates for npm (frontend)
+  - package-ecosystem: "npm"
+    directory: "/frontend/event-management"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "chore(frontend)"
+      include: "scope"
+    reviewers:
+      - "nvandewalle"
+    labels:
+      - "dependencies"
+      - "frontend"
+
+  # Enable version updates for NuGet (backend)
+  - package-ecosystem: "nuget"
+    directory: "/backend/EventManagement"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "chore(backend)"
+      include: "scope"
+    reviewers:
+      - "nvandewalle"
+    labels:
+      - "dependencies"
+      - "backend"
+
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(ci)"
+      include: "scope"
+    reviewers:
+      - "nvandewalle"
+    labels:
+      - "dependencies"
+      - "ci"

@@ -133,5 +133,59 @@
         "direction": "Out"
       }
     ]
+  },
+  {
+    "name": "OptionsEvent",
+    "scriptFile": "EventManagement.dll",
+    "entryPoint": "EventManagement.Functions.EventFunctions.OptionsEvent",
+    "language": "dotnet-isolated",
+    "properties": {
+      "IsCodeless": false
+    },
+    "bindings": [
+      {
+        "name": "req",
+        "direction": "In",
+        "type": "httpTrigger",
+        "authLevel": "Anonymous",
+        "methods": [
+          "options"
+        ],
+        "route": "events",
+        "properties": {}
+      },
+      {
+        "name": "$return",
+        "type": "http",
+        "direction": "Out"
+      }
+    ]
+  },
+  {
+    "name": "OptionsEventId",
+    "scriptFile": "EventManagement.dll",
+    "entryPoint": "EventManagement.Functions.EventFunctions.OptionsEventId",
+    "language": "dotnet-isolated",
+    "properties": {
+      "IsCodeless": false
+    },
+    "bindings": [
+      {
+        "name": "req",
+        "direction": "In",
+        "type": "httpTrigger",
+        "authLevel": "Anonymous",
+        "methods": [
+          "options"
+        ],
+        "route": "events/{id:int}",
+        "properties": {}
+      },
+      {
+        "name": "$return",
+        "type": "http",
+        "direction": "Out"
+      }
+    ]
   }
 ]

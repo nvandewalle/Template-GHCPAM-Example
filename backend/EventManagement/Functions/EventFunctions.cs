@@ -18,6 +18,13 @@ public class EventFunctions
         _logger = loggerFactory.CreateLogger<EventFunctions>();
     }
 
+    private static void AddCorsHeaders(HttpResponseData response)
+    {
+        response.Headers.Add("Access-Control-Allow-Origin", "*");
+        response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    }
+
     [Function("GetEvents")]
     public async Task<HttpResponseData> GetEvents([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "events")] HttpRequestData req)
     {
@@ -40,6 +47,7 @@ public class EventFunctions
         }
 
         var response = req.CreateResponse(HttpStatusCode.OK);
+        AddCorsHeaders(response);
         await response.WriteAsJsonAsync(filteredEvents.ToList());
         return response;
     }
@@ -54,11 +62,13 @@ public class EventFunctions
         if (eventItem == null)
         {
             var notFoundResponse = req.CreateResponse(HttpStatusCode.NotFound);
+            AddCorsHeaders(notFoundResponse);
             await notFoundResponse.WriteStringAsync($"Event with ID {id} not found");
             return notFoundResponse;
         }
 
         var response = req.CreateResponse(HttpStatusCode.OK);
+        AddCorsHeaders(response);
         await response.WriteAsJsonAsync(eventItem);
         return response;
     }
@@ -74,6 +84,7 @@ public class EventFunctions
         if (eventItem == null)
         {
             var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+            AddCorsHeaders(badRequestResponse);
             await badRequestResponse.WriteStringAsync("Invalid event data");
             return badRequestResponse;
         }
@@ -82,6 +93,7 @@ public class EventFunctions
         _events.Add(eventItem);
 
         var response = req.CreateResponse(HttpStatusCode.Created);
+        AddCorsHeaders(response);
         await response.WriteAsJsonAsync(eventItem);
         return response;
     }
@@ -96,6 +108,7 @@ public class EventFunctions
         if (existingEvent == null)
         {
             var notFoundResponse = req.CreateResponse(HttpStatusCode.NotFound);
+            AddCorsHeaders(notFoundResponse);
             await notFoundResponse.WriteStringAsync($"Event with ID {id} not found");
             return notFoundResponse;
         }
@@ -106,6 +119,7 @@ public class EventFunctions
         if (updatedEvent == null)
         {
             var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+            AddCorsHeaders(badRequestResponse);
             await badRequestResponse.WriteStringAsync("Invalid event data");
             return badRequestResponse;
         }
@@ -115,6 +129,7 @@ public class EventFunctions
         _events[index] = updatedEvent;
 
         var response = req.CreateResponse(HttpStatusCode.OK);
+        AddCorsHeaders(response);
         await response.WriteAsJsonAsync(updatedEvent);
         return response;
     }
@@ -129,6 +144,7 @@ public class EventFunctions
         if (eventItem == null)
         {
             var notFoundResponse = req.CreateResponse(HttpStatusCode.NotFound);
+            AddCorsHeaders(notFoundResponse);
             await notFoundResponse.WriteStringAsync($"Event with ID {id} not found");
             return notFoundResponse;
         }
@@ -136,6 +152,27 @@ public class EventFunctions
         _events.Remove(eventItem);
 
         var response = req.CreateResponse(HttpStatusCode.NoContent);
+        AddCorsHeaders(response);
+        return response;
+    }
+
+    [Function("OptionsEvent")]
+    public HttpResponseData OptionsEvent([HttpTrigger(AuthorizationLevel.Anonymous, "options", Route = "events")] HttpRequestData req)
+    {
+        _logger.LogInformation("Handling preflight request for events");
+
+        var response = req.CreateResponse(HttpStatusCode.OK);
+        AddCorsHeaders(response);
+        return response;
+    }
+
+    [Function("OptionsEventId")]
+    public HttpResponseData OptionsEventId([HttpTrigger(AuthorizationLevel.Anonymous, "options", Route = "events/{id:int}")] HttpRequestData req)
+    {
+        _logger.LogInformation("Handling preflight request for specific event");
+
+        var response = req.CreateResponse(HttpStatusCode.OK);
+        AddCorsHeaders(response);
         return response;
     }
 }
